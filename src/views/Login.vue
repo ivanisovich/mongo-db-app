@@ -1,11 +1,32 @@
+<script setup>
+import { ref } from "vue";
+import axios from "axios";
+import { useUserStore } from '../store/app';
+import UserService from '../axios/UserServices';
+
+const registerData = ref({
+  email: "",
+  password: "",
+});
+
+const loginData = ref({
+  email: "",
+  password: "",
+});
+
+const userStore = useUserStore();
+
+</script>
+
 <template>
+
   <div>
-    <!-- Форма регистрации -->
-    <form @submit.prevent="register">
+    {{ userStore.userInfo }}
+    <form @submit.prevent="UserService.register(registerData)">
       <input
         type="text"
-        v-model="registerData.username"
-        placeholder="Username"
+        v-model="registerData.email"
+        placeholder="Email"
       />
       <input
         type="password"
@@ -15,9 +36,8 @@
       <button type="submit">Register</button>
     </form>
 
-    <!-- Форма логина -->
-    <form @submit.prevent="login">
-      <input type="text" v-model="loginData.username" placeholder="Username" />
+    <form @submit.prevent="UserService.login(loginData)">
+      <input type="text" v-model="loginData.email" placeholder="Email" />
       <input
         type="password"
         v-model="loginData.password"
@@ -27,47 +47,3 @@
     </form>
   </div>
 </template>
-
-<script setup>
-import { ref } from "vue";
-import axios from "axios";
-
-const registerData = ref({
-  username: "",
-  password: "",
-});
-
-const loginData = ref({
-  username: "",
-  password: "",
-});
-
-const register = async () => {
-  try {
-    const response = await axios.post(
-      "http://localhost:3001/register",
-      registerData.value
-    );
-    console.log(response.data);
-    // Обработка ответа регистрации
-  } catch (error) {
-    console.error(error);
-    // Обработка ошибок регистрации
-  }
-};
-
-const login = async () => {
-  try {
-    const response = await axios.post(
-      "http://localhost:3001/login",
-      loginData.value
-    );
-    console.log(response.data);
-    // Обработка ответа логина
-    // Возможно, сохранение токена аутентификации
-  } catch (error) {
-    console.error(error);
-    // Обработка ошибок логина
-  }
-};
-</script>
