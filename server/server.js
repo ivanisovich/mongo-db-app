@@ -75,7 +75,7 @@ app.post("/login", async (req, res) => {
         maxAge: 24 * 60 * 60 * 1000 // 24 часа
       });
 
-      res.send({ email: user.email });
+      res.send({ email: user.email,qrCode: user.qrCode });
     } else {
       res.status(400).send({ message: "Неверные учетные данные" });
     }

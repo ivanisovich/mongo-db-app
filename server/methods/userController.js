@@ -6,6 +6,8 @@ const QRCode = require('qrcode');
 async function createUser(client, email, password) {
   const db = client.db("app");
   const collection = db.collection("users");
+  const qrCodeUrl = await generateQR(email);
+
 
   const existingUser = await collection.findOne({ email });
   if (existingUser) {
@@ -26,7 +28,7 @@ async function createUser(client, email, password) {
     password: hashedPassword,
     emailToken,
     emailVerified: false,
-    qrCode: generateQR(email)
+    qrCode: qrCodeUrl
   });
 
   return result;

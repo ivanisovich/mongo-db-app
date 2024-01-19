@@ -18,7 +18,7 @@ class UserService {
       const response = await axios.post("http://localhost:3001/login", data, {
         withCredentials: true
       });
-      userStore.setUser(response.data.email)
+      userStore.setUser(response.data)
       console.log(response.data)
       return response.data;
     } catch (error) {
