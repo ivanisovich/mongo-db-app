@@ -1,6 +1,6 @@
 <script setup>
 import MenuItem from "./MenuItem.vue";
-
+import MenuService from "../../axios/MenuServices";
 const menuList = [
   {
     name: "Cappuccino",
@@ -27,6 +27,8 @@ const menuList = [
     image: "/src/assets/coffee4.png"
   }
 ];
+
+
 </script>
 
 <template>

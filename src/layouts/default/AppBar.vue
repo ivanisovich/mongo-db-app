@@ -7,7 +7,7 @@
         active
         color="primary"
       >
-        <router-link class="link" to="/">
+        <router-link class="link" to="/menu">
           <v-btn @click="currentPage = 0">
             <v-icon>mdi-history</v-icon>
           </v-btn>

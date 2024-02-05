@@ -1,10 +1,10 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import axios from "axios";
 import { useUserStore } from "../store/app";
 import UserService from "../axios/UserServices";
 
-const loginData = ref({
+const registerData = ref({
   email: "",
   password: "",
 });
@@ -12,10 +12,6 @@ const loginData = ref({
 const visible = ref(false);
 
 const userStore = useUserStore();
-
-onMounted(() => {
-  UserService.checkAuthentication();
-});
 </script>
 
 <template>
@@ -32,11 +28,11 @@ onMounted(() => {
           max-width="228"
           src="../assets/logo.png"
         ></v-img>
-        <form @submit.prevent="UserService.login(loginData)">
+        <form @submit.prevent="UserService.register(registerData)">
           <div class="text-subtitle-1 text-medium-emphasis">Account</div>
 
           <v-text-field
-            v-model="loginData.email"
+            v-model="registerData.email"
             density="compact"
             placeholder="Email address"
             prepend-inner-icon="mdi-email-outline"
@@ -47,19 +43,10 @@ onMounted(() => {
             class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
           >
             Password
-
-            <a
-              class="text-caption text-decoration-none text-blue"
-              href="#"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              Forgot login password?</a
-            >
           </div>
 
           <v-text-field
-            v-model="loginData.password"
+            v-model="registerData.password"
             :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
             :type="visible ? 'text' : 'password'"
             density="compact"
@@ -78,19 +65,13 @@ onMounted(() => {
             </v-card-text>
           </v-card>
 
-          <v-btn
-            class="login-button"
-            block
-            size="large"
-            variant="tonal"
-            type="submit"
-          >
-            Log In
+          <v-btn class="login-button" block size="large" variant="tonal" type="submit">
+            Register
           </v-btn>
 
           <v-card-text class="text-center">
-            <router-link class="text-blue text-decoration-none" to="/register">
-              Register<v-icon icon="mdi-chevron-right"></v-icon>
+            <router-link class="text-blue text-decoration-none" to="/login">
+              Sign up now<v-icon icon="mdi-chevron-right"></v-icon>
             </router-link>
           </v-card-text>
         </form>

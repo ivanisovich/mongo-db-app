@@ -3,7 +3,8 @@ const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const QRCode = require('qrcode');
 
-async function createUser(client, email, password) {
+
+async function createUser(client, email, password,role) {
   const db = client.db("app");
   const collection = db.collection("users");
   const qrCodeUrl = await generateQR(email);
@@ -28,7 +29,8 @@ async function createUser(client, email, password) {
     password: hashedPassword,
     emailToken,
     emailVerified: false,
-    qrCode: qrCodeUrl
+    qrCode: qrCodeUrl,
+    role:role
   });
 
   return result;
@@ -65,10 +67,11 @@ async function sendEmail({ to, subject, html }) {
 async function generateQR(email) {
   try {
     const qrCodeUrl = await QRCode.toDataURL(email);
-    // Сохраните qrCodeUrl в базе данных для соответствующего пользователя
     return qrCodeUrl;
   } catch (error) {
     console.error(error);
   }
 }
-module.exports = { createUser, findUser };
+
+
+module.exports = { createUser, findUser};
