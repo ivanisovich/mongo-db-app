@@ -16,6 +16,16 @@ const userStore = useUserStore();
 onMounted(() => {
   UserService.checkAuthentication();
 });
+
+const login = async () => {
+  let response = await UserService.login(loginData.value)
+
+  if(response.role){
+    router.push({ path: "menu" });
+  } else {
+    alert(response.message)
+  }
+};
 </script>
 
 <template>
@@ -32,7 +42,7 @@ onMounted(() => {
           max-width="228"
           src="../assets/logo.png"
         ></v-img>
-        <form @submit.prevent="UserService.login(loginData)">
+        <form @submit.prevent="login">
           <div class="text-subtitle-1 text-medium-emphasis">Account</div>
 
           <v-text-field
