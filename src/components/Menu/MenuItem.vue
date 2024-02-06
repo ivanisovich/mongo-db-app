@@ -11,7 +11,7 @@ const Props = defineProps({
 <template>
 
   <article class="item">
-    <img class="item__image" :src="Props.itemInfo.image" alt="" />
+    <img class="item__image" :src="Props.itemInfo.photo" alt="" />
     <div class="item__text">
       <h3 class="item__title">{{Props.itemInfo.name}}</h3>
       <p class="item__description">{{Props.itemInfo.description}}</p>

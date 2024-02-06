@@ -1,23 +1,36 @@
 <script setup>
-import {ref} from "vue"
+import { ref, onMounted } from "vue";
 import MenuList from "@/components/Menu/MenuList.vue";
-import NewItemPopup from "@/components/Menu/NewItemPopup.vue"
+import NewItemPopup from "@/components/Menu/NewItemPopup.vue";
 import { useUserStore } from "../store/app";
+import MenuService from "../axios/MenuServices";
 
-
-const showPopup = ref(false)
+const showPopup = ref(false);
 const userStore = useUserStore();
+const MenuItems = ref([]);
 
+onMounted(async () => {
+  let response = await MenuService.getItems();
+  if (response.length > 0) {
+    MenuItems.value = response;
+  }
+});
+
+const closePopup = () => {
+  showPopup.value = false;
+};
 </script>
 
 <template>
-
   <div class="header">
     <h1 class="header__title">Coffe app</h1>
-    <v-btn v-if="userStore.userInfo.role === 'admin'" @click="showPopup = !showPopup">+</v-btn>
+    <v-col  v-if="userStore.userInfo.role === 'admin'"
+      @click="showPopup = !showPopup" cols="auto">
+      <v-btn density="compact" :icon="showPopup? 'mdi-minus':'mdi-plus'"></v-btn>
+    </v-col>
   </div>
-  <MenuList />
-  <NewItemPopup v-if="showPopup === true"/>
+  <MenuList :menu-items="MenuItems" />
+  <NewItemPopup @close-popup="closePopup" v-if="showPopup === true" />
 </template>
 
 <style lang="scss" scoped>
@@ -30,9 +43,9 @@ const userStore = useUserStore();
 .header {
   background: #0f9565;
   height: 50px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   @include settings.container;
 }

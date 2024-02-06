@@ -159,7 +159,8 @@ app.post("/menu/add", async (req, res) => {
 
 app.get('/menu/get', async (req, res) => {
   try {
-    const menuList = await getMenuItems();
+    const menuList = await getMenuItems(client);
+    console.log(menuList)
     res.json(menuList);
   } catch (e) {
     res.status(500).send({ message: e.message });

@@ -1,14 +1,11 @@
-import axios from 'axios';
+import Axios from "@/request";
 
 class MenuService {
-  async getMenuList() {
-    try {
-      const response = await axios.get('http://localhost:3001/menu/get');
-      console.log(response)
-    } catch (error) {
-      console.error('Error:', error.message);
-      throw error;
-    }
+  async getItems() {
+    return await Axios.request({
+      url: "menu/get",
+      method: "get"
+    });
   }
 }
 

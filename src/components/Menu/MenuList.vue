@@ -1,39 +1,21 @@
 <script setup>
 import MenuItem from "./MenuItem.vue";
-import MenuService from "../../axios/MenuServices";
-const menuList = [
-  {
-    name: "Cappuccino",
-    description: "with chocolate",
-    category: "Cappuccino",
-    image: "/src/assets/coffee1.png"
-  },
-  {
-    name: "Cappuccino",
-    description: "with oat milk",
-    category: "Cappuccino",
-    image: "/src/assets/coffee2.png"
-  },
-  {
-    name: "Cappuccino",
-    description: "regular",
-    category: "Cappuccino",
-    image: "/src/assets/coffee3.png"
-  },
-  {
-    name: "Cappuccino",
-    description: "with coconut milk",
-    category: "Cappuccino",
-    image: "/src/assets/coffee4.png"
-  }
-];
 
+const props = defineProps({
+  menuItems: Array
+});
 
 </script>
 
 <template>
+   <div class="sceleton" v-if="menuItems.length <= 0">
+      <v-skeleton-loader width="150px" type="card"></v-skeleton-loader>
+      <v-skeleton-loader width="150px" type="card"></v-skeleton-loader>
+      <v-skeleton-loader width="150px" type="card"></v-skeleton-loader>
+      <v-skeleton-loader width="150px" type="card"></v-skeleton-loader>
+    </div>
   <div class="list">
-    <MenuItem v-for="(item, index) in menuList" :key="index" :itemInfo="item" />
+    <MenuItem v-for="(item, index) in menuItems" :key="index" :itemInfo="item" />
   </div>
 </template>
 
@@ -43,5 +25,12 @@ const menuList = [
         flex-wrap: wrap;
         gap: 10px;
         justify-content: center;
+    }
+
+    .sceleton{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
     }
 </style>

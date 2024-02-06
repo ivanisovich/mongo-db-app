@@ -1,46 +1,29 @@
-import axios from "axios";
-import { useUserStore } from "../store/app";
-import router from "@/router";
-import request from "@/request";
-
-const userStore = useUserStore();
+import Axios from "@/request";
 
 class UserService {
   async register(data) {
-    try {
-      const response = await axios.post("http://localhost:3001/register", data);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async register(data) {
-    return await request.post({
+    return await Axios.request({
       url: "register",
       data: data,
+      method: "post"
     });
   }
 
   async login(data) {
-    return await request.post({
+    return await Axios.request({
       url: "login",
       data: data,
-      credentials: true,
+      method: "post",
+      credentials: true
     });
   }
 
-  async checkAuthentication() {
-    try {
-      const response = await axios.get("http://localhost:3001/validateToken", {
-        withCredentials: true,
-      });
-      userStore.setUser(response.data);
-      router.push({ path: "menu" });
-    } catch (error) {
-      console.error("Error:", error.message);
-      throw error;
-    }
+  async checkAuthentication(data) {
+    return await Axios.request({
+      url: "validateToken",
+      method: "get",
+      credentials: true,
+    });
   }
 }
 

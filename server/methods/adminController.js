@@ -12,9 +12,9 @@ async function createItem(client, data) {
   return result;
 }
 
-async function getMenuItems() {
-  const database = client.db("app");
-  const menu = database.collection("menu");
+async function getMenuItems(client) {
+  const db = client.db("app");
+  const menu = db.collection("menu");
   const menusList = await menu.find({}).toArray();
 
   return menusList;

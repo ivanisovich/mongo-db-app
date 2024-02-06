@@ -1,36 +1,34 @@
 import axios from "axios";
 
-class Request {
-  async get(data) {
+class Axios {
+  async request(params) {
     try {
-      const response = await axios.get(
-        "http://localhost:3001/" + data.url,
-        data.data,
-        {
-          withCredentials: data.credentials ?? false,
-        }
-      );
-      return response.data;
-    } catch (error) {
-      return error;
-      console.error("Error:", error.message);
-      throw error;
-    }
-  }
+      const { method, url, data, credentials = false } = params;
+      const baseUrl = "http://localhost:3001/";
 
-  async post(data) {
-    try {
-      const response = await axios.post(
-        "http://localhost:3001/" + data.url,
-        data.data
-      );
-      return response.data;
+      if (data !== undefined) {
+        const response = await axios[method](
+          `${baseUrl}${url}`,
+          data,
+          {
+            withCredentials: credentials,
+          }
+        );
+        return response.data;
+      } else {
+        const response = await axios[method](
+          `${baseUrl}${url}`,
+          {
+            withCredentials: credentials,
+          }
+        );
+        return response.data;
+      }
     } catch (error) {
       return error;
-      console.error("Error:", error.message);
-      throw error;
     }
   }
 }
 
-export default new Request();
+
+export default new Axios();
