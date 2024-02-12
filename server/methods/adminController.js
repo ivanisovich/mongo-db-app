@@ -1,8 +1,3 @@
-const bcrypt = require("bcrypt");
-const crypto = require("crypto");
-const nodemailer = require("nodemailer");
-const QRCode = require("qrcode");
-
 async function createItem(client, data) {
   const db = client.db("app");
   const collection = db.collection("menu");

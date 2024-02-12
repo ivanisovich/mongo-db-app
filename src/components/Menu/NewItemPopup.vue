@@ -76,7 +76,7 @@ const handleSubmit = () => {
           :rules="rules"
           v-model="category"
           label="Select"
-          :items="['Latte', 'Cappuccino']"
+          :items="['Латте', 'Капучино']"
           variant="outlined"
         ></v-select>
       </v-container>

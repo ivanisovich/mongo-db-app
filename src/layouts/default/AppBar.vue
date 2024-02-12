@@ -1,3 +1,11 @@
+<script setup>
+import { ref } from "vue";
+import { useUserStore } from "../../store/app";
+const userStore = useUserStore();
+
+const currentPage = ref(0);
+</script>
+
 <template>
   <v-app-bar flat>
     <v-layout class="overflow-visible" style="height: 56px">
@@ -9,31 +17,29 @@
       >
         <router-link class="link" to="/menu">
           <v-btn @click="currentPage = 0">
-            <v-icon>mdi-history</v-icon>
+            <v-icon>mdi-coffee</v-icon>
           </v-btn>
         </router-link>
 
-        <router-link class="link" to="/profile">
+        <router-link
+          v-if="userStore.userInfo.role === 'admin'"
+          class="link"
+          to="/scan"
+        >
           <v-btn @click="currentPage = 1">
-            <v-icon>mdi-heart</v-icon>
+            <v-icon>mdi-qrcode-scan</v-icon>
           </v-btn>
         </router-link>
 
         <router-link class="link" to="/qrcode">
           <v-btn @click="currentPage = 2">
-            <v-icon>mdi-map-marker</v-icon>
+            <v-icon>mdi-qrcode</v-icon>
           </v-btn>
         </router-link>
       </v-bottom-navigation>
     </v-layout>
   </v-app-bar>
 </template>
-
-<script setup>
-import { ref } from "vue";
-
-const currentPage = ref(0);
-</script>
 
 <style lang="scss">
 .link {

@@ -3,32 +3,23 @@ import axios from "axios";
 class Axios {
   async request(params) {
     try {
-      const { method, url, data, credentials = false } = params;
+      const { method, url, data } = params;
       const baseUrl = "http://localhost:3001/";
+      const config = {
+        withCredentials: params.credentials || false,
+      };
 
+      let response;
       if (data !== undefined) {
-        const response = await axios[method](
-          `${baseUrl}${url}`,
-          data,
-          {
-            withCredentials: credentials,
-          }
-        );
-        return response.data;
+        response = await axios[method](`${baseUrl}${url}`, data, config);
       } else {
-        const response = await axios[method](
-          `${baseUrl}${url}`,
-          {
-            withCredentials: credentials,
-          }
-        );
-        return response.data;
+        response = await axios[method](`${baseUrl}${url}`, config);
       }
+      return response.data;
     } catch (error) {
       return error;
     }
   }
 }
-
 
 export default new Axios();

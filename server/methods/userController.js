@@ -30,7 +30,8 @@ async function createUser(client, email, password,role) {
     emailToken,
     emailVerified: false,
     qrCode: qrCodeUrl,
-    role:role
+    role:role,
+    stickers: 0
   });
 
   return result;

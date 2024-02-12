@@ -1,13 +1,20 @@
-import axios from 'axios';
+import Axios from "@/request";
 
 class AdminService {
   async addItem(data) {
-    try {
-      const response = await axios.post("http://localhost:3001/menu/add", data);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    return await Axios.request({
+      url: "menu/add",
+      data: data,
+      method: "post",
+    });
+  }
+
+  async scanQr(data) {
+    return await Axios.request({
+      url: "scanQr",
+      data: data,
+      method: "post",
+    });
   }
 }
 

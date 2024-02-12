@@ -8,7 +8,6 @@ const jwt = require("jsonwebtoken");
 const { createUser, findUser } = require("./methods/userController");
 const { createItem, getMenuItems } = require("./methods/adminController");
 const cookieParser = require("cookie-parser");
-
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
@@ -24,6 +23,36 @@ const client = new MongoClient(uri, {
     version: ServerApiVersion.v1,
   },
 });
+
+const authenticateToken = async (req, res, next) => {
+  const token = req.cookies["token"];
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, "секретный_ключ", async (err, decoded) => {
+    if (err) return res.sendStatus(403);
+
+    try {
+      const userId = new ObjectId(decoded.userId);
+
+      const user = await db.collection("users").findOne({ _id: userId });
+
+      if (!user) {
+        return res.sendStatus(404);
+      }
+
+      req.user = user;
+      next();
+    } catch (dbError) {
+      console.error(
+        "Error accessing the database or invalid ObjectId:",
+        dbError
+      );
+      res.sendStatus(500);
+    }
+  });
+};
+
+const db = client.db("app");
 
 app.use(cors(corsOptions));
 
@@ -49,7 +78,7 @@ connectToMongoDB().then(() => {
 app.post("/register", async (req, res) => {
   try {
     const { email, password } = req.body;
-    const role = "user"
+    const role = "user";
     const result = await createUser(client, email, password, role);
     res
       .status(201)
@@ -77,7 +106,7 @@ app.post("/login", async (req, res) => {
         maxAge: 24 * 60 * 60 * 1000, // 24 часа
       });
 
-      res.send({ email: user.email, qrCode: user.qrCode, role: user.role});
+      res.send({ email: user.email, qrCode: user.qrCode, role: user.role, stickers: user.stickers });
     } else {
       res.status(400).send({ message: "Неверные учетные данные" });
     }
@@ -88,7 +117,6 @@ app.post("/login", async (req, res) => {
 
 app.get("/confirm-email/:token", async (req, res) => {
   try {
-    const db = client.db("app");
     const collection = db.collection("users");
 
     const user = await collection.findOne({ emailToken: req.params.token });
@@ -107,40 +135,14 @@ app.get("/confirm-email/:token", async (req, res) => {
   }
 });
 
-const authenticateToken = async (req, res, next) => {
-  const token = req.cookies["token"];
-  if (token == null) return res.sendStatus(401);
 
-  jwt.verify(token, "секретный_ключ", async (err, decoded) => {
-    if (err) return res.sendStatus(403);
-
-    try {
-      const userId = new ObjectId(decoded.userId);
-
-      const db = client.db("app");
-      const user = await db.collection("users").findOne({ _id: userId });
-
-      if (!user) {
-        return res.sendStatus(404);
-      }
-
-      req.user = user;
-      next();
-    } catch (dbError) {
-      console.error(
-        "Error accessing the database or invalid ObjectId:",
-        dbError
-      );
-      res.sendStatus(500);
-    }
-  });
-};
 
 app.get("/validateToken", authenticateToken, (req, res) => {
   res.send({
     email: req.user.email,
     qrCode: req.user.qrCode,
-    role: req.user.role
+    role: req.user.role,
+    stickers: req.user.stickers
   });
 });
 
@@ -149,19 +151,40 @@ app.post("/menu/add", async (req, res) => {
     const data = req.body;
 
     await createItem(client, data);
-    res
-      .status(201)
-      .send({ message: "Пункт меню создан"});
+    res.status(201).send({ message: "Пункт меню создан" });
   } catch (e) {
     res.status(500).send({ message: e.message });
   }
 });
 
-app.get('/menu/get', async (req, res) => {
+app.get("/menu/get", async (req, res) => {
   try {
     const menuList = await getMenuItems(client);
-    console.log(menuList)
     res.json(menuList);
+  } catch (e) {
+    res.status(500).send({ message: e.message });
+  }
+});
+
+app.post("/scanQr", async (req, res) => {
+  try {
+    const { email } = req.body; // Получаем email из тела запроса
+    const collection = db.collection("users");
+
+    // Находим пользователя по email
+    const user = await collection.findOne({ email: email });
+    console.log(user._id);
+
+    if (!user) {
+      return res.status(404).send("Пользователь не найден.");
+    }
+
+    // Увеличиваем поле stickers на единицу
+    await collection.updateOne(
+      { _id: user._id },
+      { $inc: { stickers: 1 } } // Используем оператор $inc для увеличения значения
+    );
+    res.send("Количество стикеров увеличено.");
   } catch (e) {
     res.status(500).send({ message: e.message });
   }

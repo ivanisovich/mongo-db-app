@@ -10,9 +10,15 @@ const userStore = useUserStore();
 const MenuItems = ref([]);
 
 onMounted(async () => {
-  let response = await MenuService.getItems();
-  if (response.length > 0) {
-    MenuItems.value = response;
+  const storedMenuItems = localStorage.getItem("menuItems");
+  if (storedMenuItems) {
+    MenuItems.value = JSON.parse(storedMenuItems);
+  } else {
+    let response = await MenuService.getItems();
+    if (response.length > 0) {
+      MenuItems.value = response;
+      localStorage.setItem("menuItems", JSON.stringify(response));
+    }
   }
 });
 
