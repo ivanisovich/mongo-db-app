@@ -72,13 +72,12 @@ const handleSubmit = () => {
           variant="outlined"
           @change="onFileSelected"
         ></v-file-input>
-        <v-select
-          :rules="rules"
-          v-model="category"
-          label="Select"
-          :items="['Латте', 'Капучино']"
+        <v-text-field
           variant="outlined"
-        ></v-select>
+          v-model="category"
+          :rules="rules"
+          label="Category"
+        ></v-text-field>
       </v-container>
 
       <v-divider></v-divider>

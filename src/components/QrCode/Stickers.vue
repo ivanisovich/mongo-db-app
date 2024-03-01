@@ -10,26 +10,39 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="stickers">
-    <div
-      v-for="(item, index) in stickersArray"
-      :key="index"
-      class="stickers__item"
-    >
-      <v-icon size="x-large" v-if="index < props.stickers"
-        >mdi-checkbox-marked-outline</v-icon
+  <div class="stickers-wrapper">
+    <div class="stickers">
+      <div
+        v-for="(item, index) in stickersArray"
+        :key="index"
+        class="stickers__item"
       >
+        <img
+          v-if="index < props.stickers"
+          src="../../assets/coffe-sticker.svg"
+          alt=""
+        />
+        <img v-else src="../../assets/coffe-sticker-empty.svg" alt="" />
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+.stickers-wrapper{
+  background: white;
+  padding: 30px;
+    
+  border-radius: 12px;
+  margin: 0 auto;
+  margin-top: -40px;
+  width: fit-content;
+}
+
 .stickers {
   display: flex;
-  flex-wrap: wrap;
   width: fit-content;
-  max-width: 130px;
-  gap: 1px;
+ 
 
   &__item {
     display: flex;
@@ -37,7 +50,6 @@ const props = defineProps({
     align-items: center;
     width: 40px;
     height: 40px;
-    border: 1px solid black;
   }
 }
 </style>

@@ -4,6 +4,7 @@ import { useUserStore } from '../store/app';
 
 function isAuthenticated() {
   const userStore = useUserStore();
+  userStore.getUser()
 
   return userStore.userInfo !== null;
 }
@@ -13,6 +14,14 @@ const routes = [
     path: "/",
     component: () => import("@/layouts/default/Default.vue"),
     children: [
+      {
+        path: "/",
+        name: "Menu",
+        // route level code-splitting
+        // this generates a separate chunk (Home-[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import("@/views/Menu.vue"),
+      },
       {
         path: "/menu",
         name: "Menu",
@@ -30,12 +39,12 @@ const routes = [
         component: () => import("@/views/Profile.vue"),
       },
       {
-        path: "/qrcode",
-        name: "QrCode",
+        path: "/profile",
+        name: "Profile",
         // route level code-splitting
         // this generates a separate chunk (Home-[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import("@/views/QrCode.vue"),
+        component: () => import("@/views/Profile.vue"),
       },
       {
         path: "/scan",

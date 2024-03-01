@@ -18,6 +18,8 @@ onMounted(async () => {
   isLoading.value = true;
   let response = await UserService.checkAuthentication();
   if (response.email) {
+    localStorage.setItem('userData',  JSON.stringify(response));
+
     userStore.setUser(response);
     router.push({ path: "menu" }).then(() => {
       isLoading.value = false;

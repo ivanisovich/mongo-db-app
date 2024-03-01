@@ -10,11 +10,9 @@ class Axios {
       };
 
       let response;
-      if (data !== undefined) {
-        response = await axios[method](`${baseUrl}${url}`, data, config);
-      } else {
-        response = await axios[method](`${baseUrl}${url}`, config);
-      }
+      if (!data) data = [];
+      response = await axios[method](baseUrl + url, data, config);
+
       return response.data;
     } catch (error) {
       return error;

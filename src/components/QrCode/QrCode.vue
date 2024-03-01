@@ -2,12 +2,19 @@
 const props = defineProps({
   qrCode: {
     type: String,
-    default: () => (""),
+    default: () => "",
   },
 });
-
 </script>
 
 <template>
-  <img :src="props.qrCode" alt="" />
+  <img class="qr-code" :src="props.qrCode" alt="" />
 </template>
+
+<style >
+.qr-code {
+  display: block;
+  margin: 0 auto;
+  margin-top: 40px;
+}
+</style>

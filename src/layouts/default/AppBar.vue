@@ -31,7 +31,7 @@ const currentPage = ref(0);
           </v-btn>
         </router-link>
 
-        <router-link class="link" to="/qrcode">
+        <router-link class="link" to="/profile">
           <v-btn @click="currentPage = 2">
             <v-icon>mdi-qrcode</v-icon>
           </v-btn>

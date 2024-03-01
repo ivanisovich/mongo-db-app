@@ -3,7 +3,10 @@ import { ref, computed, onMounted } from "vue";
 import MenuItem from "./MenuItem.vue";
 
 const props = defineProps({
-  menuItems: Array,
+  menuItems: {
+    type: Array,
+    default: () => ([]),
+  },
 });
 
 const groupedData = computed(() => {
@@ -21,8 +24,6 @@ const groupedData = computed(() => {
 console.log(groupedData.value);
 
 const blinds = () => {};
-// Использование console.log вне функции или хука жизненного цикла может не отрабатывать ожидаемо из-за реактивности
-// Рассмотрите возможность проверки внутри onMounted или watchEffect для отладки
 </script>
 
 <template>
@@ -35,14 +36,21 @@ const blinds = () => {};
     </div>
 
     <div class="filter">
-      <v-chip icon="mdi-blinds" @click="blinds"> Close blinds </v-chip>
-      <v-chip icon="mdi-blinds" @click="blinds"> Close blinds </v-chip>
+      <v-chip
+        v-for="(items, category) in groupedData"
+        :key="category"
+        icon="mdi-blinds"
+        @click="blinds"
+      >
+        <a class="filter__item" :href="'#' + category">{{ category }}</a>
+      </v-chip>
     </div>
 
     <div
       class="category"
       v-for="(items, category) in groupedData"
       :key="category"
+      :id="category"
     >
       <h2 class="category__title">{{ category }}</h2>
 
@@ -54,18 +62,29 @@ const blinds = () => {};
 </template>
 
 <style lang="scss" scoped>
-.menu {
-  padding-left: 20px;
-  padding-right: 20px;
-}
+@use "../../styles/settings";
 
 .filter {
   padding-bottom: 20px;
   padding-top: 20px;
+  display: flex;
+  gap: 10px;
+  position: sticky;
+  top: 0px;
+  box-sizing: border-box;
+  background: white;
+  width: 100%;
+
+  @include settings.container;
+  &__item {
+    text-decoration: none;
+    color: black;
+  }
 }
 
 .category {
   margin-bottom: 20px;
+  @include settings.container;
 
   &__inner {
     display: flex;

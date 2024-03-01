@@ -1,6 +1,6 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-export const useUserStore = defineStore('user', {
+export const useUserStore = defineStore("user", {
   state: () => ({
     userInfo: null,
   }),
@@ -10,6 +10,9 @@ export const useUserStore = defineStore('user', {
     },
     clearUser() {
       this.userInfo = null;
+    },
+    getUser() {
+      this.userInfo = JSON.parse(localStorage.getItem('userData'));
     }
-  }
+  },
 });
